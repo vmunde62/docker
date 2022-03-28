@@ -1,0 +1,38 @@
+version: '3'
+services:
+  reactiondb:
+    image: vprofile/vprofiledb:V1
+    ports:
+      - "3306:3306"
+    volumes:
+      - vprodbdata:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=mydbpassword
+
+  reactioncache:
+    image: memcached
+    ports:
+      - "11211:11211"
+
+  reactionmq:
+    image: rabbitmq
+    ports:
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  reactionapp:
+    image: vprofile/vprofileapp:V1
+    ports:
+      - "8080:8080"
+    volumes: 
+      - vproappdata:/usr/local/tomcat/webapps
+
+  reactionweb:
+    image: vprofile/vprofileweb:V1
+    ports:
+      - "80:80"
+volumes:
+  vprodbdata: {}
+  vproappdata: {}
